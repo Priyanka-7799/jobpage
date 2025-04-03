@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navigation Bar -->
+    <header class="bg-blue-600 text-white p-4 flex justify-between">
+        <h1 class="text-xl font-bold">Job Board</h1>
+        <button id="login-btn" class="bg-green-500 px-4 py-2 rounded">Login</button>
+    </header>
+
+    <div class="container mx-auto p-5">
+        <!-- Job Posting Form -->
+        <section class="bg-white p-5 rounded shadow mb-5">
+            <h2 class="text-lg font-bold mb-3">Post a New Job</h2>
+            <form id="job-form">
+                <input type="text" id="job-title" placeholder="Job Title" class="w-full p-2 border mb-2" required>
+                <textarea id="job-description" placeholder="Job Description" class="w-full p-2 border mb-2" required></textarea>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Post Job</button>
+            </form>
+        </section>
+
+        <!-- Job Listings -->
+        <section class="bg-white p-5 rounded shadow">
+            <h2 class="text-lg font-bold mb-3">Available Jobs</h2>
+            <div id="job-list"></div>
+        </section>
+    </div>
+
+    <script>
+        const jobList = document.getElementById("job-list");
+        const jobForm = document.getElementById("job-form");
+
+        // Sample Job Data
+        let jobs = [
+            { id: 1, title: "Frontend Developer", description: "React.js, Tailwind CSS" },
+            { id: 2, title: "Backend Developer", description: "Node.js, PostgreSQL" }
+        ];
+
+        // Function to Render Jobs
+        function renderJobs() {
+            jobList.innerHTML = "";
+            jobs.forEach(job => {
+                const jobDiv = document.createElement("div");
+                jobDiv.classList.add("p-4", "border-b");
+                jobDiv.innerHTML = `
+                    <h3 class="font-bold">${job.title}</h3>
+                    <p>${job.description}</p>
+                    <button class="apply-btn bg-blue-500 text-white px-4 py-2 mt-2 rounded" data-id="${job.id}">Apply Now</button>
+                `;
+                jobList.appendChild(jobDiv);
+            });
+
+            // Add Event Listeners for Apply Buttons
+            document.querySelectorAll(".apply-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    alert("Application Submitted for Job ID: " + this.dataset.id);
+                });
+            });
+        }
+
+        // Handle New Job Submission
+        jobForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const title = document.getElementById("job-title").value;
+            const description = document.getElementById("job-description").value;
+
+            if (title && description) {
+                jobs.push({ id: jobs.length + 1, title, description });
+                renderJobs();
+                jobForm.reset();
+            }
+        });
+
+        // Render Initial Jobs
+        renderJobs();
+    </script>
+
+</body>
+</html>
